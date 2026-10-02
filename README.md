@@ -5,12 +5,22 @@
 [Profile](https://github.com/Lawi-Mwaura) · [Documentation index](https://github.com/Lawi-Mwaura/Lawi-Mwaura/blob/main/case-studies/README.md) · [I-soco](https://github.com/Lawi-Mwaura/I-soco-showcase)
 
 <p align="center">
-  <img src="assets/maly-welcome.jpg" width="38%" alt="Actual Maly welcome interface in an isolated portfolio preview." />
+  <img src="assets/maly-welcome-native.png" width="38%" alt="Maly welcome interface running in an Android phone emulator." />
   &nbsp;&nbsp;
-  <img src="assets/maly-budget.jpg" width="38%" alt="Actual Maly spending plan interface using sample data." />
+  <img src="assets/maly-budget-native.png" width="38%" alt="Maly spending plan running in an Android phone emulator with sample data." />
 </p>
 
-*Actual application components rendered in an isolated web preview. Backend calls are replaced with local fixtures. Financial values are sample data; native-device behavior is not demonstrated by these images.*
+*Actual application components running in an isolated Android phone emulator. Backend calls are replaced with local fixtures and financial values are labeled as sample data. These captures demonstrate native rendering; they do not establish end-to-end inbox, permission, or storage behavior.*
+
+[Problem](#problem-statement) · [Architecture](#system-design) · [Native gallery](#native-interface-gallery) · [Evidence](#metrics-and-evidence)
+
+## Problem statement
+
+A mobile finance interface needs useful records from inconsistent device messages. Interrupted reads, duplicate inputs, and account transitions must not silently lose data or retain stale user state.
+
+## Technologies used
+
+TypeScript · React Native · Expo · Expo Router · Supabase · TanStack Query · Zustand
 
 ## Engineering scope
 
@@ -28,25 +38,15 @@ Maly is a React Native and Expo personal finance application backed by Supabase.
 
 ## System design
 
-```mermaid
-flowchart TB
-    INBOX[Permissioned device inbox] --> SCAN[Paginated scanner]
-    SCAN --> PARSE[Recognition and normalization]
-    PARSE --> DEDUP[Deduplication]
-    DEDUP --> QUEUE[Pending candidate queue]
-    QUEUE --> REVIEW[Review and application workflow]
-    REVIEW --> DATA[Supabase persistence]
-    DATA --> CACHE[TanStack Query cache]
-    CACHE --> UI[React Native screens]
-    AUTH[Session and PIN gate] --> UI
-    CLEAN[User-state cleanup] --> QUEUE
-    CLEAN --> CACHE
-    CLEAN --> LOCAL[User-scoped local storage]
-```
+**Component architecture.** The boxes identify technologies and responsibilities; boundaries group the application runtime and managed backend. Relationships show dependencies and integration protocols, rather than a step-by-step processing flow.
 
-*Simplified component map. Device permissions and secure-storage behavior need native-device validation; a web preview cannot establish them.*
+![Maly native components, local persistence, Supabase Auth and PostgreSQL](assets/maly-architecture.svg)
+
+*Logical component architecture. Device permissions, secure storage, and backend policy enforcement require separate native and live-backend verification.*
 
 The ingestion pipeline separates reading, recognition, parsing, deduplication, and application state. That separation makes a malformed message testable without starting the entire app or reading a real inbox.
+
+## Challenges and engineering decisions
 
 ### 1. Message parsing is a data-quality boundary
 
@@ -84,6 +84,24 @@ The authentication gate evaluates new-user, logged-out member, guest, PIN setup,
 
 This makes routing policy inspectable as a decision function. Device-specific storage and permission behavior still need testing on supported native platforms.
 
+## Outcomes
+
+- Recognition and normalization separate supported transaction messages from unrelated inputs.
+- Failed inbox reads preserve the scan cursor; overlap and deduplication support recovery.
+- Explicit reset paths clear selected user data, pending queues, and query caches.
+- Authentication routing separates guest, returning-member, PIN setup, and PIN entry states.
+
+These are implementation outcomes supported by the reviewed source, not measured production improvements.
+
+## Metrics and evidence
+
+| Measure | Evidence |
+| :--- | :--- |
+| Selected tests | **55 passed across five suites** on 1 October 2026. |
+| Test scope | Parser, inbox, cleanup, authentication gate, and PIN storage; device/storage boundaries are mocked. |
+| Interface evidence | Actual native components captured in an isolated Android emulator with local fixtures. |
+| Production metrics | No verified active-user, ingestion-throughput, retention, or latency figures supplied. |
+
 ## Validation
 
 On **1 October 2026**, **55 tests across five selected suites passed**: parser, inbox scanner, user-state cleanup, authentication gate, and PIN storage.
@@ -99,6 +117,28 @@ The following are evaluation priorities, not claimed performance results:
 - **Account transitions:** test cleanup with real storage, queued native events, and a restored session.
 - **Format drift:** add anonymized fixtures for previously unseen patterns and track parse failures without retaining raw financial messages in telemetry.
 - **Device behavior:** validate permissions, background execution, secure storage, and offline recovery on supported devices.
+
+## Native interface gallery
+
+Five Android emulator captures of the actual React Native components, taken on **2 October 2026**. Screens are isolated from the live backend and inbox. All financial values come from synthetic fixtures. Device-message permissions are intentionally disabled; the permission warning is shown honestly.
+
+| 01 · Welcome | 02 · Goal selection |
+| :---: | :---: |
+| <img src="assets/maly-welcome-native.png" width="320" alt="Native Maly welcome screen with member and guest entry choices." /> | <img src="assets/maly-goals-native.png" width="320" alt="Native Maly goal selection interface with no selection submitted." /> |
+
+Entry choices and onboarding hierarchy from the actual application screens. Fixture navigation appears above the screen; it is a preview control.
+
+| 03 · Member sign-in | 04 · Spending plan |
+| :---: | :---: |
+| <img src="assets/maly-signin-native.png" width="320" alt="Native Maly member sign-in with empty email and password fields." /> | <img src="assets/maly-budget-native.png" width="320" alt="Native spending plan with synthetic budget values and SMS permission warning." /> |
+
+Empty authentication fields expose no credentials. The spending plan combines summary, breakdown, navigation, and a manual-entry fallback. The capture does not establish live authentication or inbox ingestion.
+
+### 05 · Manual transaction entry
+
+<p align="center"><img src="assets/maly-transaction-native.png" width="360" alt="Native transaction entry with a blank amount and generic spending categories." /></p>
+
+Actual category-selection controls with no transaction submitted. This modal covers the fixture banner; it still uses the same isolated preview and contains no real financial records.
 
 ## Technical discussion
 
