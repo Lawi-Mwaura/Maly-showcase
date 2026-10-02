@@ -4,6 +4,16 @@
 
 [Profile](https://github.com/Lawi-Mwaura) · [Documentation index](https://github.com/Lawi-Mwaura/Lawi-Mwaura/blob/main/case-studies/README.md) · [I-soco](https://github.com/Lawi-Mwaura/I-soco-showcase)
 
+**Private source repository:** [Lawi-Mwaura/maly](https://github.com/Lawi-Mwaura/maly). Access is limited to authorized collaborators; GitHub may show a 404 to public visitors.
+
+[Problem](#problem-statement) · [Architecture](#system-design) · [Native gallery](#native-interface-gallery) · [Evidence](#metrics-and-evidence)
+
+## Problem statement
+
+Managing everyday finances is difficult when spending records are scattered across messages and a budget has to be reconstructed manually. People need a usable view of transactions, spending plans and savings goals. Maly brings those records and planning tools into a mobile interface.
+
+**Engineering challenge.** A mobile finance interface needs useful records from inconsistent device messages. Interrupted reads, duplicate inputs, and account transitions must not silently lose data or retain stale user state.
+
 <p align="center">
   <img src="assets/maly-welcome-native.png" width="38%" alt="Maly welcome interface running in an Android phone emulator." />
   &nbsp;&nbsp;
@@ -12,15 +22,9 @@
 
 *Actual application components running in an isolated Android phone emulator. Backend calls are replaced with local fixtures and financial values are labeled as sample data. These captures demonstrate native rendering; they do not establish end-to-end inbox, permission, or storage behavior.*
 
-[Problem](#problem-statement) · [Architecture](#system-design) · [Native gallery](#native-interface-gallery) · [Evidence](#metrics-and-evidence)
-
-## Problem statement
-
-A mobile finance interface needs useful records from inconsistent device messages. Interrupted reads, duplicate inputs, and account transitions must not silently lose data or retain stale user state.
-
 ## Technologies used
 
-TypeScript · React Native · Expo · Expo Router · Supabase · TanStack Query · Zustand
+TypeScript · JavaScript · React Native · Expo · Expo Router · Kotlin · Android SDK / BroadcastReceiver · React Native bridge · Supabase Auth / PostgreSQL · REST APIs / Node.js · TanStack Query · Zustand · AsyncStorage · Expo SecureStore · NativeWind / Tailwind CSS · React Hook Form · Zod · React Native Skia · Reanimated · Victory Native · GitHub Actions · Expo/EAS · Grafana Faro · Sentry · Jest · Testing Library
 
 ## Engineering scope
 
@@ -144,6 +148,6 @@ Actual category-selection controls with no transaction submitted. This modal cov
 
 I can walk through parser boundaries, cursor correctness, deduplication versus successful persistence, query-cache lifecycle, and the tradeoffs between mobile convenience and explicit security state.
 
-**Stack:** TypeScript · React Native · Expo · Supabase · TanStack Query · Zustand
+**Stack:** TypeScript · JavaScript · React Native · Expo · Expo Router · Kotlin · Android SDK / BroadcastReceiver · React Native bridge · Supabase Auth / PostgreSQL · REST APIs / Node.js · TanStack Query · Zustand · AsyncStorage · Expo SecureStore · NativeWind / Tailwind CSS · React Hook Form · Zod · React Native Skia · Reanimated · Victory Native · GitHub Actions · Expo/EAS · Grafana Faro · Sentry · Jest · Testing Library
 
 [Contact Lawi](mailto:lawimwaura@gmail.com) · [Back to profile](https://github.com/Lawi-Mwaura)
