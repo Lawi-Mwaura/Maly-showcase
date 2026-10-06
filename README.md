@@ -2,7 +2,7 @@
 
 ### Mobile engineering: reliable ingestion and deliberate state boundaries
 
-[Profile](https://github.com/Lawi-Mwaura) · [Documentation index](https://github.com/Lawi-Mwaura/Lawi-Mwaura/blob/main/case-studies/README.md) · [I-soco](https://github.com/Lawi-Mwaura/I-soco-showcase)
+[Profile](https://github.com/Lawi-Mwaura) · [Documentation index](https://github.com/Lawi-Mwaura/Lawi-Mwaura/blob/main/case-studies/README.md)
 
 **Private source repository:** [Lawi-Mwaura/maly](https://github.com/Lawi-Mwaura/maly). Access is limited to authorized collaborators; GitHub may show a 404 to public visitors.
 
